@@ -24,20 +24,40 @@ CYAN = colors.HexColor("#42D7E8")
 PALE = colors.HexColor("#EDF7F8")
 WHITE = colors.white
 
-pdfmetrics.registerFont(TTFont("DejaVu", "/usr/share/fonts/google-noto-vf/NotoSans[wght].ttf"))
-pdfmetrics.registerFont(TTFont("DejaVu-Bold", "/usr/share/fonts/google-noto-vf/NotoSans[wght].ttf"))
-pdfmetrics.registerFont(TTFont("DejaVuMono", "/usr/share/fonts/google-noto-vf/NotoSansMono[wght].ttf"))
+FONT_CANDIDATES = [
+    (
+        Path("/usr/share/fonts/google-noto-vf/NotoSans[wght].ttf"),
+        Path("/usr/share/fonts/google-noto-vf/NotoSans[wght].ttf"),
+        Path("/usr/share/fonts/google-noto-vf/NotoSansMono[wght].ttf"),
+    ),
+    (
+        Path("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"),
+        Path("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"),
+        Path("/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"),
+    ),
+]
+
+FONT_REGULAR, FONT_BOLD, FONT_MONO = "Helvetica", "Helvetica-Bold", "Courier"
+for regular_path, bold_path, mono_path in FONT_CANDIDATES:
+    if all(path.exists() for path in (regular_path, bold_path, mono_path)):
+        pdfmetrics.registerFont(TTFont("ProjectSans", str(regular_path)))
+        pdfmetrics.registerFont(TTFont("ProjectSans-Bold", str(bold_path)))
+        pdfmetrics.registerFont(TTFont("ProjectMono", str(mono_path)))
+        FONT_REGULAR, FONT_BOLD, FONT_MONO = "ProjectSans", "ProjectSans-Bold", "ProjectMono"
+        break
 
 styles = getSampleStyleSheet()
-styles.add(ParagraphStyle(name="TitleX", fontName="DejaVu-Bold", fontSize=31, leading=35, textColor=WHITE, spaceAfter=10))
-styles.add(ParagraphStyle(name="SubX", fontName="DejaVu", fontSize=14, leading=19, textColor=colors.HexColor("#D7E9EE")))
-styles.add(ParagraphStyle(name="H1X", fontName="DejaVu-Bold", fontSize=23, leading=28, textColor=NAVY, spaceAfter=13))
-styles.add(ParagraphStyle(name="H2X", fontName="DejaVu-Bold", fontSize=14, leading=18, textColor=CORAL, spaceBefore=10, spaceAfter=6))
-styles.add(ParagraphStyle(name="BodyX", fontName="DejaVu", fontSize=10.2, leading=15, textColor=INK, spaceAfter=8))
-styles.add(ParagraphStyle(name="SmallX", fontName="DejaVu", fontSize=8.2, leading=11, textColor=MUTED, spaceAfter=4))
-styles.add(ParagraphStyle(name="CodeX", fontName="DejaVuMono", fontSize=7.8, leading=11, textColor=colors.HexColor("#DCEFF4"), backColor=NAVY, borderPadding=8, spaceBefore=5, spaceAfter=9))
-styles.add(ParagraphStyle(name="QuoteX", fontName="DejaVu", fontSize=10.2, leading=15, leftIndent=11, borderColor=CYAN, borderWidth=2, borderPadding=8, textColor=INK, backColor=PALE, spaceAfter=9))
-styles.add(ParagraphStyle(name="CenterX", fontName="DejaVu", fontSize=10, leading=15, alignment=TA_CENTER, textColor=INK))
+styles.add(ParagraphStyle(name="TitleX", fontName=FONT_BOLD, fontSize=31, leading=35, textColor=WHITE, spaceAfter=10))
+styles.add(ParagraphStyle(name="SubX", fontName=FONT_REGULAR, fontSize=14, leading=19, textColor=colors.HexColor("#D7E9EE")))
+styles.add(ParagraphStyle(name="H1X", fontName=FONT_BOLD, fontSize=23, leading=28, textColor=NAVY, spaceAfter=13))
+styles.add(ParagraphStyle(name="H2X", fontName=FONT_BOLD, fontSize=14, leading=18, textColor=CORAL, spaceBefore=10, spaceAfter=6))
+styles.add(ParagraphStyle(name="BodyX", fontName=FONT_REGULAR, fontSize=10.2, leading=15, textColor=INK, spaceAfter=8))
+styles.add(ParagraphStyle(name="SmallX", fontName=FONT_REGULAR, fontSize=8.2, leading=11, textColor=MUTED, spaceAfter=4))
+styles.add(ParagraphStyle(name="CodeX", fontName=FONT_MONO, fontSize=7.8, leading=11, textColor=colors.HexColor("#DCEFF4"), backColor=NAVY, borderPadding=8, spaceBefore=5, spaceAfter=9))
+styles.add(ParagraphStyle(name="QuoteX", fontName=FONT_REGULAR, fontSize=10.2, leading=15, leftIndent=11, borderColor=CYAN, borderWidth=2, borderPadding=8, textColor=INK, backColor=PALE, spaceAfter=9))
+styles.add(ParagraphStyle(name="CenterX", fontName=FONT_REGULAR, fontSize=10, leading=15, alignment=TA_CENTER, textColor=INK))
+styles.add(ParagraphStyle(name="TableCellX", fontName=FONT_REGULAR, fontSize=9, leading=11, textColor=INK))
+styles.add(ParagraphStyle(name="TableHeadX", fontName=FONT_BOLD, fontSize=9, leading=11, textColor=WHITE))
 
 
 def header_footer(canvas, doc):
@@ -47,22 +67,22 @@ def header_footer(canvas, doc):
         canvas.setFillColor(colors.Color(0.02, 0.07, 0.12, alpha=0.82))
         canvas.roundRect(15 * mm, 48 * mm, A4[0] - 30 * mm, 86 * mm, 5 * mm, fill=1, stroke=0)
         canvas.setFillColor(CYAN)
-        canvas.setFont("DejaVu-Bold", 10)
+        canvas.setFont(FONT_BOLD, 10)
         canvas.drawString(25 * mm, 120 * mm, "GUIA INTRODUTÓRIO - EDIÇÃO 2026")
         cover_title = Paragraph("Fundamentos para a Certificação<br/>Data Engineer Associate", styles["TitleX"])
         cover_title.wrapOn(canvas, A4[0] - 50 * mm, 48 * mm)
         cover_title.drawOn(canvas, 25 * mm, 69 * mm)
         canvas.setFillColor(WHITE)
-        canvas.setFont("DejaVu", 9)
+        canvas.setFont(FONT_REGULAR, 9)
         canvas.drawString(25 * mm, 58 * mm, "Databricks - roteiro de estudo para iniciantes")
         canvas.restoreState()
         return
     canvas.setFillColor(NAVY)
     canvas.rect(0, A4[1] - 13 * mm, A4[0], 13 * mm, fill=1, stroke=0)
-    canvas.setFont("DejaVu-Bold", 8)
+    canvas.setFont(FONT_BOLD, 8)
     canvas.setFillColor(WHITE)
     canvas.drawString(18 * mm, A4[1] - 8.5 * mm, "FUNDAMENTOS PARA A CERTIFICAÇÃO DATA ENGINEER ASSOCIATE")
-    canvas.setFont("DejaVu", 8)
+    canvas.setFont(FONT_REGULAR, 8)
     canvas.setFillColor(MUTED)
     canvas.drawRightString(A4[0] - 18 * mm, 10 * mm, f"{doc.page}")
     canvas.setStrokeColor(CYAN)
@@ -114,12 +134,14 @@ story.append(PageBreak())
 page(story, "Antes de começar", [
     p("Este guia organiza os fundamentos cobrados na certificação <b>Databricks Certified Data Engineer Associate</b>. Ele foi escrito para quem está iniciando e precisa transformar o guia oficial em uma rota de estudo."),
     p("O material <b>não substitui prática na plataforma</b>, treinamento oficial nem o guia vigente do exame. Produtos, nomes e objetivos podem mudar; confira novamente a página oficial antes de agendar a prova.", "QuoteX"),
+    p("Este material apresenta uma seleção introdutória de fundamentos e não cobre individualmente todos os objetivos do exame.", "QuoteX"),
     p("Ao final, você deverá reconhecer os principais componentes da plataforma, entender o percurso de um dado em uma arquitetura lakehouse e saber quais atividades praticar em cada domínio."),
     source("Databricks Certified Data Engineer Associate Exam Guide, versão válida a partir de 4 maio 2026."),
 ], "ORIENTAÇÃO")
 
-page(story, "Como o exame está organizado", [
+page(story, "Como este e-book organiza os estudos", [
     p("O guia oficial vigente informa <b>45 questões pontuadas</b>, <b>90 minutos</b>, formato de múltipla escolha e ausência de pré-requisito obrigatório. A Databricks recomenda experiência prática antes da tentativa."),
+    p("A tabela abaixo é uma organização didática deste e-book. Ela não reproduz individualmente as seções ou todos os objetivos do guia oficial."),
     Table([
         ["Domínio de estudo", "O que revisar"],
         ["Plataforma", "workspace, arquitetura e capacidades"],
@@ -130,7 +152,7 @@ page(story, "Como o exame está organizado", [
         ["Governança e segurança", "Unity Catalog, permissões e qualidade"],
     ], colWidths=[48 * mm, 113 * mm], style=TableStyle([
         ("BACKGROUND", (0, 0), (-1, 0), NAVY), ("TEXTCOLOR", (0, 0), (-1, 0), WHITE),
-        ("FONTNAME", (0, 0), (-1, 0), "DejaVu-Bold"), ("FONTNAME", (0, 1), (-1, -1), "DejaVu"),
+        ("FONTNAME", (0, 0), (-1, 0), FONT_BOLD), ("FONTNAME", (0, 1), (-1, -1), FONT_REGULAR),
         ("FONTSIZE", (0, 0), (-1, -1), 9), ("LEADING", (0, 0), (-1, -1), 12),
         ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#C8D8DD")),
         ("VALIGN", (0, 0), (-1, -1), "TOP"), ("ROWBACKGROUNDS", (0, 1), (-1, -1), [WHITE, PALE]),
@@ -162,13 +184,13 @@ page(story, "Lakehouse combina flexibilidade e controle", [
 page(story, "Bronze, prata e ouro indicam qualidade", [
     p("A arquitetura medalhão organiza o dado em camadas que aumentam progressivamente sua qualidade e utilidade."),
     Table([
-        ["Camada", "Estado", "Uso típico"],
-        ["Bronze", "bruto e rastreável", "preservar a chegada e permitir reprocessamento"],
-        ["Prata", "limpo e validado", "padronizar tipos, remover duplicidades e integrar fontes"],
-        ["Ouro", "agregado e orientado ao negócio", "alimentar indicadores, relatórios e produtos de dados"],
+        [Paragraph(value, styles["TableHeadX"]) for value in ["Camada", "Estado", "Uso típico"]],
+        [Paragraph(value, styles["TableCellX"]) for value in ["Bronze", "bruto e rastreável", "preservar a chegada e permitir reprocessamento"]],
+        [Paragraph(value, styles["TableCellX"]) for value in ["Prata", "limpo e validado", "padronizar tipos, remover duplicidades e integrar fontes"]],
+        [Paragraph(value, styles["TableCellX"]) for value in ["Ouro", "agregado e orientado ao negócio", "alimentar indicadores, relatórios e produtos de dados"]],
     ], colWidths=[29 * mm, 50 * mm, 82 * mm], style=TableStyle([
         ("BACKGROUND", (0, 0), (-1, 0), NAVY), ("TEXTCOLOR", (0, 0), (-1, 0), WHITE),
-        ("FONTNAME", (0, 0), (-1, 0), "DejaVu-Bold"), ("FONTNAME", (0, 1), (-1, -1), "DejaVu"),
+        ("FONTNAME", (0, 0), (-1, 0), FONT_BOLD), ("FONTNAME", (0, 1), (-1, -1), FONT_REGULAR),
         ("FONTSIZE", (0, 0), (-1, -1), 9), ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#C8D8DD")),
         ("VALIGN", (0, 0), (-1, -1), "TOP"), ("ROWBACKGROUNDS", (0, 1), (-1, -1), [WHITE, PALE]),
         ("LEFTPADDING", (0, 0), (-1, -1), 7), ("RIGHTPADDING", (0, 0), (-1, -1), 7),
@@ -269,7 +291,7 @@ page(story, "Plano de estudo em quatro ciclos", [
         ["4", "operação e revisão", "investigar uma falha, revisar objetivos e responder simulados"],
     ], colWidths=[18 * mm, 58 * mm, 85 * mm], style=TableStyle([
         ("BACKGROUND", (0, 0), (-1, 0), NAVY), ("TEXTCOLOR", (0, 0), (-1, 0), WHITE),
-        ("FONTNAME", (0, 0), (-1, 0), "DejaVu-Bold"), ("FONTNAME", (0, 1), (-1, -1), "DejaVu"),
+        ("FONTNAME", (0, 0), (-1, 0), FONT_BOLD), ("FONTNAME", (0, 1), (-1, -1), FONT_REGULAR),
         ("FONTSIZE", (0, 0), (-1, -1), 9), ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#C8D8DD")),
         ("VALIGN", (0, 0), (-1, -1), "TOP"), ("ROWBACKGROUNDS", (0, 1), (-1, -1), [WHITE, PALE]),
         ("LEFTPADDING", (0, 0), (-1, -1), 7), ("RIGHTPADDING", (0, 0), (-1, -1), 7),

@@ -2,6 +2,8 @@
 
 E-book introdutório para organizar os estudos para a certificação **Databricks Certified Data Engineer Associate**. O conteúdo apresenta plataforma lakehouse, arquitetura medalhão, ingestão, transformações com SQL e PySpark, Delta Lake, notebooks, Lakeflow Jobs, Unity Catalog, otimização e uma rota prática de revisão.
 
+> Este material apresenta uma seleção introdutória de fundamentos e não cobre individualmente todos os objetivos do exame.
+
 ## Entregável
 
 - [E-book em PDF](output/fundamentos-data-engineer-associate.pdf)
@@ -14,7 +16,18 @@ E-book introdutório para organizar os estudos para a certificação **Databrick
 - **Codex**: planejamento, pesquisa, estruturação, redação e revisão.
 - **Gerador de imagens do Codex**: ilustração original da capa.
 - **Python e ReportLab**: diagramação e geração do PDF.
-- **PyMuPDF**: renderização das páginas para verificação visual.
+- **PyMuPDF**: ferramenta auxiliar de controle de qualidade, usada fora do gerador para renderizar o PDF em imagens e permitir a inspeção visual das páginas.
+
+## Como gerar o PDF
+
+Com Python instalado, execute:
+
+```bash
+python -m pip install -r requirements.txt
+python src/build_ebook.py
+```
+
+O arquivo será criado em `output/fundamentos-data-engineer-associate.pdf`. O script procura Noto Sans ou DejaVu Sans em caminhos comuns e, se nenhuma delas estiver disponível, usa as fontes internas Helvetica e Courier do ReportLab.
 
 ## Processo de criação
 
@@ -33,5 +46,9 @@ Este é um material independente de estudo. Não é treinamento oficial, não ga
 ## Projeto-base
 
 Estrutura inicial baseada no projeto educacional [prompts-recipe-to-create-a-ebook](https://github.com/felipeAguiarCode/prompts-recipe-to-create-a-ebook), de Felipe Aguiar, disponibilizado como referência durante a formação da DIO. Conteúdo, capa, prompts e PDF foram personalizados para este projeto.
+
+## Licença
+
+O conteúdo autoral e o código produzidos especificamente para este projeto possuem licenças próprias. Consulte [LICENSE.md](LICENSE.md). A licença não se estende ao projeto-base, às marcas mencionadas nem a materiais de terceiros.
 
 Projeto desenvolvido por **Marconiadsf** para o desafio de criação de e-book com IA generativa da DIO.
