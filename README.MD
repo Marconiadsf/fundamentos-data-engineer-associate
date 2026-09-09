@@ -47,8 +47,4 @@ Este é um material independente de estudo. Não é treinamento oficial, não ga
 
 Estrutura inicial baseada no projeto educacional [prompts-recipe-to-create-a-ebook](https://github.com/felipeAguiarCode/prompts-recipe-to-create-a-ebook), de Felipe Aguiar, disponibilizado como referência durante a formação da DIO. Conteúdo, capa, prompts e PDF foram personalizados para este projeto.
 
-## Licença
-
-O conteúdo autoral e o código produzidos especificamente para este projeto possuem licenças próprias. Consulte [LICENSE.md](LICENSE.md). A licença não se estende ao projeto-base, às marcas mencionadas nem a materiais de terceiros.
-
 Projeto desenvolvido por **Marconiadsf** para o desafio de criação de e-book com IA generativa da DIO.
