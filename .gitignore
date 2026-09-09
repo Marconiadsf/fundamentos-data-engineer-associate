@@ -1,0 +1,5 @@
+
+# Arquivos temporários
+tmp/
+__pycache__/
+*.pyc
